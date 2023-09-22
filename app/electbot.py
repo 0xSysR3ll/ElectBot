@@ -173,8 +173,9 @@ async def vote(ctx):
     embed = Embed(
         title="Bienvenue dans la cellule de vote de l'ESNA",
         color=discord.Color.blue(),
-        description="""Pour voter pour une liste, réagissez avec le numéro correspondant.\n
-        Vous ne pouvez voter qu'une seule fois et toute tentative de triche sera sanctionnée.""",
+        description=
+        "Pour voter pour une liste, réagissez avec le numéro correspondant.\n"
+        "Vous ne pouvez voter qu'une seule fois et toute tentative de triche sera sanctionnée.",
         timestamp=ctx.message.created_at
     )
 
@@ -226,8 +227,9 @@ async def on_reaction_add(reaction, user):
             (key for key, value in NUMBER_EMOJIS.items() if value == reaction.emoji), None)
         embed = discord.Embed(
             title="À voter !",
-            description=f"""Votre vote pour pour la liste {candidate_id}
-            a bien été pris en compte !""",
+            description=
+            f"Votre vote pour pour la liste {candidate_id}"
+            "a bien été pris en compte !",
             color=discord.Color.green()
         )
         await user.send(embed=embed)
