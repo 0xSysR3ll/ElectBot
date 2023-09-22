@@ -183,14 +183,15 @@ async def on_reaction_add(reaction, user):
 
             return
         else:
+            candidate_id = next(
+                (key for key, value in NUMBER_EMOJIS.items() if value == reaction.emoji), None)
             embed = discord.Embed(
-                title="Confirmation!",
-                description="Votre vote a bien été pris en compte !",
+                title="À voter !",
+                description=f"Votre vote pour pour la liste {candidate_id} a bien été pris en compte !",
                 color=discord.Color.green()
             )
             await user.send(embed=embed)
-            candidate_id = next(
-                (key for key, value in NUMBER_EMOJIS.items() if value == reaction.emoji), None)
+            
             db.add_vote(user.id, candidate_id)
             logger.info(f"Added vote for candidate {candidate_id} to database")
 
