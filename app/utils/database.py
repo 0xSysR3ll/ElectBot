@@ -165,6 +165,6 @@ class ElectionDatabase:
             "FROM candidates "
             "LEFT JOIN votes ON candidates.id = votes.candidate_id "
             "GROUP BY candidates.name "
-            "ORDER BY vote_count DESC"
+            "ORDER BY votes DESC"
         )
         return self.cursor.fetchall()
