@@ -228,7 +228,7 @@ async def on_reaction_add(reaction, user):
         embed = discord.Embed(
             title="À voter !",
             description=
-            f"Votre vote pour pour la liste {candidate_id}"
+            f"Votre vote pour pour la liste {candidate_id} "
             "a bien été pris en compte !",
             color=discord.Color.green()
         )
