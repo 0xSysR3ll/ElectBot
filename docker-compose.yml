@@ -1,0 +1,35 @@
+version: '3.1'
+services:
+
+  electbot:
+    image: 0xsysr3ll/electbot:latest
+    build:
+      context: app
+      dockerfile: Dockerfile
+
+    container_name: electbot
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    
+    configs:
+      - source: electbot_config
+        target: /app/config/config.yml
+
+  mariadb:
+    image: mariadb:latest
+    container_name: electbot-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root-password
+      MYSQL_DATABASE: election_db
+      MYSQL_USER: election_user
+      MYSQL_PASSWORD: election_password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:
+
+configs:
+  electbot_config:
+    file: ./config/config.yml

@@ -1,0 +1,21 @@
+---
+
+discord:
+  token: <discord_token>
+  guild_id: <guild_id>
+  embed_image: <image_url>
+
+database:
+  host: electbot-db
+  port: 3306
+  username: election_user
+  password: election_password
+  database: election_db
+
+candidates:
+  - name: List 1
+    description: We are list 1
+  - name: List 2
+    description: We are list 2
+  - name: Blanc
+    description: Vote blanc
