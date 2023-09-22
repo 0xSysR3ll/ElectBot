@@ -100,7 +100,7 @@ async def on_ready():
 
 
 @bot.event
-async def on_command_error(ctx, error):
+async def on_command_error(error):
     """
     Handles command errors and sends a message to the user if the command is not found.
 
