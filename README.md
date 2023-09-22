@@ -79,6 +79,6 @@ If you wish to contribute to the bot's development, feel free to fork the reposi
 
 ### 🤝 Support
 
-For support, questions, or feedback, feel free to [contact me](0xsysr3ll@pm.me)
+For support, questions, or feedback, feel free to [contact me](mailto:0xsysr3ll@pm.me)
 
 ---
