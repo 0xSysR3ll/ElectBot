@@ -16,6 +16,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        apt-get update && apt-get upgrade -y && apt install -y build-essential curl
+        curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash
+        apt-get update && apt install -y libmariadb-dev libmariadb3
         python -m pip install --upgrade pip
         pip install pylint
         if [ -f ./app/requirements.txt ]; then pip install -r ./app/requirements.txt; fi
