@@ -5,15 +5,15 @@
 
 ### 📖 Table of Contents
 
-1. [Introduction](#introduction)
-2. [Prerequisites](#prerequisites)
-3. [Setup Instructions](#setup-instructions)
-   - [Using Docker](#using-docker)
-   - [Without Docker](#without-docker)
-4. [Configuration](#configuration)
-5. [Contributing](#contributing)
-6. [License](#license)
-7. [Support](#support)
+1. [Introduction](#-introduction)
+2. [Prerequisites](#-prerequisites)
+3. [Setup Instructions](#-setup-instructions)
+   - [Using Docker](#-using-docker)
+   - [Without Docker](#-without-docker)
+4. [Configuration](#-configuration)
+5. [Contributing](#-contributing)
+6. [License](#-license)
+7. [Support](#-support)
 
 ### 🚀 Introduction
 
