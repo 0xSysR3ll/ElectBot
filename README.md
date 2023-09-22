@@ -56,6 +56,7 @@ P.S : *As you can see, the bot has been customized for a particular use. But it 
 - `libmariadb-dev`
 
 See the [official docs](https://mariadb.com/docs/skysql-previous-release/connect/programming-languages/c/install/) if you struggle.
+
 6. Run the bot using:
    ```bash
    python3 electbot.py
