@@ -15,6 +15,7 @@ RUN apt-get update --no-install-recommends && apt install -y \
 
 WORKDIR /app
 COPY app .
+RUN mkdir config
 
 RUN pip install --no-cache-dir -r requirements.txt
 
