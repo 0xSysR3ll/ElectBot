@@ -109,7 +109,6 @@ async def on_command_error(ctx, error):
         error: The error raised by the command.
     """
     if isinstance(error, commands.CommandNotFound):
-        ctx.send(f"La commande `{ctx.invoked_with}`n'existe pas !")
         return
 
 
