@@ -75,6 +75,8 @@ class ElectionDatabase:
     def add_vote(self, voter, candidate):
         self.cursor.execute(
             "UPDATE votes SET candidate_id=%s WHERE user_id=%s", (candidate, voter))
+        self.cursor.execute(
+            "UPDATE candidates SET votes=votes+1 WHERE id=%s", (candidate,))
         self.conn.commit()
 
     def has_voted(self, voter):
