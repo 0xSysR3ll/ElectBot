@@ -191,7 +191,7 @@ async def on_reaction_add(reaction, user):
                 color=discord.Color.green()
             )
             await user.send(embed=embed)
-            
+
             db.add_vote(user.id, candidate_id)
             logger.info(f"Added vote for candidate {candidate_id} to database")
 
@@ -208,7 +208,8 @@ async def resultats(ctx):
         )
         await ctx.send(embed=embed)
         return
-
+    embed = Embed(title="Résultats de l'élection",
+                  color=discord.Color.blue(), timestamp=ctx.message.created_at)
     with ElectionDatabase(**db_parameters) as db:
         results = db.get_results()
         for result in results:
