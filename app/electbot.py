@@ -95,12 +95,8 @@ async def on_ready():
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        embed = discord.Embed(
-            title="Erreur !",
-            description=f"La commande `{ctx.invoked_with}`n'existe pas !",
-            color=discord.Color.red()
-        )
-        await ctx.send(embed=embed)
+        ctx.send(f"La commande `{ctx.invoked_with}`n'existe pas !")
+        return
 
 
 @bot.command(name="candidats", help="📃 Afficher la liste les candidats ")
@@ -120,21 +116,12 @@ async def candidats(ctx):
 async def vote(ctx):
     allowed_users = bot.get_guild(GUILD_ID).members
     if ctx.author not in allowed_users:
-        embed = discord.Embed(
-            title="Erreur !",
-            description="Vous n'êtes pas autorisé à voter. Si vous pensez que c'est une erreur, contactez @0xsysr3ll.",
-            color=discord.Color.red()
-        )
-        await ctx.send(embed=embed)
+        ctx.send("Erreur ! Vous n'êtes pas autorisé à voter.")
         return
 
     if ctx.channel.type != discord.ChannelType.private:
-        embed = discord.Embed(
-            title="Erreur !",
-            description="Veuillez voter en message privé.",
-            color=discord.Color.red()
-        )
-        await ctx.send(embed=embed)
+        error = await ctx.send("Erreur ! Vous ne pouvez voter qu'en message privé.")
+        await error.delete(delay=1)
         return
 
     embed = Embed(title="Bienvenue dans la cellule de vote de l'ESNA", color=discord.Color.blue(),
@@ -164,23 +151,8 @@ async def on_reaction_add(reaction, user):
     total_seconds = 5
     with ElectionDatabase(**db_parameters) as db:
         if db.has_voted(user.id):
-            embed = discord.Embed(
-                title="Erreur !",
-                description=f"Vous avez déjà voté !\nSi vous pensez que c'est une erreur, contactez @0xsysr3ll.\nCe message ainsi que l'urne vont s'auto détruire dans {total_seconds} secondes.",
-                color=discord.Color.red()
-            )
-            warning = await user.send(embed=embed)
-
-           # Update the embed description every second
-            for i in range(total_seconds, 0, -1):
-                await asyncio.sleep(1)  # Wait for 1 second
-                embed.description = f"Vous avez déjà voté !\nSi vous pensez que c'est une erreur, contactez @0xsysr3ll.\nCe message ainsi que l'urne vont s'auto détruire dans {i-1} secondes."
-                await warning.edit(embed=embed)
-
-            # Delete the message after the countdown
-            await warning.delete()
-            await reaction.message.delete()
-
+            error = await user.send("Erreur ! Vous avez déjà voté.")
+            await error.delete(delay=1)
             return
         else:
             candidate_id = next(
@@ -201,12 +173,8 @@ async def resultats(ctx):
     guild = bot.get_guild(GUILD_ID)
     role_names = [role.name for role in guild.get_member(ctx.author.id).roles]
     if "BDE" not in role_names:
-        embed = discord.Embed(
-            title="Erreur !",
-            description="Vous n'êtes pas autorisé à voir les résultats. Si vous pensez que c'est une erreur, contactez @0xsysr3ll.",
-            color=discord.Color.red()
-        )
-        await ctx.send(embed=embed)
+        error = await ctx.send("Erreur ! Vous n'êtes pas autorisé à voir les résultats.")
+        await error.delete(delay=1)
         return
     embed = Embed(title="Résultats de l'élection",
                   color=discord.Color.blue(), timestamp=ctx.message.created_at)
