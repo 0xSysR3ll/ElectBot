@@ -160,4 +160,5 @@ cython_debug/
 #.idea/
 
 # Tests
+app/config/config.yml
 config/config.yml
