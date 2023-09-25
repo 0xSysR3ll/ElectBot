@@ -36,6 +36,8 @@ discord_config = config.get_config('discord')
 TOKEN = discord_config['token']
 GUILD_ID = discord_config['guild_id']
 EMBED_IMAGE = discord_config['embed_image']
+VOTING_MESSAGE_ID = None
+VALID_CANDIDATE_IDS = []
 
 # Get database configuration
 database_config = config.get_config('database')
@@ -172,8 +174,7 @@ async def vote(ctx):
     embed = Embed(
         title="Bienvenue dans la cellule de vote de l'ESNA",
         color=discord.Color.blue(),
-        description=
-        "Pour voter pour une liste, réagissez avec le numéro correspondant.\n"
+        description="Pour voter pour une liste, réagissez avec le numéro correspondant.\n"
         "Vous ne pouvez voter qu'une seule fois et toute tentative de triche sera sanctionnée.",
         timestamp=ctx.message.created_at
     )
@@ -181,6 +182,7 @@ async def vote(ctx):
     with ElectionDatabase(db_parameters) as list_db:
         candidates = list_db.get_candidates()
         for candidate in candidates:
+            VALID_CANDIDATE_IDS.append(candidate[0])
             candidate_id = candidate[0]
             embed.add_field(
                 name=f"{candidate[1]} : {NUMBER_EMOJIS[candidate_id]}",
@@ -190,7 +192,8 @@ async def vote(ctx):
     embed.set_image(url=EMBED_IMAGE)
     embed.set_footer(text="Développé avec ❤️ par @0xsysr3ll")
     message = await ctx.send(embed=embed)
-
+    global VOTING_MESSAGE_ID
+    VOTING_MESSAGE_ID = message.id
     for candidate in candidates:
         candidate_id = candidate[0]
         if candidate_id in NUMBER_EMOJIS:
@@ -215,6 +218,15 @@ async def on_reaction_add(reaction, user):
     """
     if user == bot.user:
         return
+
+    # Check if the reaction was added to the voting message
+    if reaction.message.id != VOTING_MESSAGE_ID:
+        return
+
+    # Check if the reaction was added in a DM
+    if not isinstance(reaction.message.channel, discord.DMChannel):
+        return
+
     logger.info("%s reacted with %s", user, reaction.emoji)
     with ElectionDatabase(db_parameters) as vote_db:
         if vote_db.has_voted(user.id):
@@ -224,10 +236,14 @@ async def on_reaction_add(reaction, user):
 
         candidate_id = next(
             (key for key, value in NUMBER_EMOJIS.items() if value == reaction.emoji), None)
+
+        if candidate_id not in VALID_CANDIDATE_IDS:
+            error = await user.send("Erreur ! Vous avez voté pour un candidat invalide.")
+            await error.delete(delay=1)
+            return
         embed = discord.Embed(
             title="À voter !",
-            description=
-            f"Votre vote pour pour la liste {candidate_id} "
+            description=f"Votre vote pour pour la liste {candidate_id} "
             "a bien été pris en compte !",
             color=discord.Color.green()
         )
