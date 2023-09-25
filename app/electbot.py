@@ -229,18 +229,18 @@ async def on_reaction_add(reaction, user):
 
     logger.info("%s reacted with %s", user, reaction.emoji)
     with ElectionDatabase(db_parameters) as vote_db:
+        candidate_id = next(
+            (key for key, value in NUMBER_EMOJIS.items() if value == reaction.emoji), None)
+        if candidate_id not in VALID_CANDIDATE_IDS:
+            error = await user.send("Erreur ! Vous avez voté pour un candidat invalide.")
+            await error.delete(delay=1)
+            return
+
         if vote_db.has_voted(user.id):
             error = await user.send("Erreur ! Vous avez déjà voté.")
             await error.delete(delay=1)
             return
 
-        candidate_id = next(
-            (key for key, value in NUMBER_EMOJIS.items() if value == reaction.emoji), None)
-
-        if candidate_id not in VALID_CANDIDATE_IDS:
-            error = await user.send("Erreur ! Vous avez voté pour un candidat invalide.")
-            await error.delete(delay=1)
-            return
         embed = discord.Embed(
             title="À voter !",
             description=f"Votre vote pour pour la liste {candidate_id} "
