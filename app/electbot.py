@@ -270,8 +270,10 @@ async def resultats(ctx):
     Uses:
         ElectionDatabase: To fetch the election results.
     """
+
     guild = bot.get_guild(GUILD_ID)
     role_names = [role.name for role in guild.get_member(ctx.author.id).roles]
+
     if "BDE" not in role_names:
         error = await ctx.send("Erreur ! Vous n'êtes pas autorisé à voir les résultats.")
         await error.delete(delay=1)
@@ -293,6 +295,39 @@ async def resultats(ctx):
     embed.set_image(url=EMBED_IMAGE)
     embed.set_footer(text="Développé avec ❤️ par @0xsysr3ll")
     await ctx.send(embed=embed)
+
+
+@bot.command(
+    name="reset",
+    help="🔄 Reset all votes in the database (staff only 😛)"
+)
+async def reset_votes(ctx):
+    """
+    Resets all the votes in the database. 
+    This command should be used with caution.
+
+    Args:
+        ctx: The context in which the command was called.
+    """
+    guild = bot.get_guild(GUILD_ID)
+    role_names = [role.name for role in guild.get_member(ctx.author.id).roles]
+    if "BDE" not in role_names:
+        error = await ctx.send("Erreur ! Vous n'êtes pas autorisé à voir les résultats.")
+        await error.delete(delay=1)
+        return
+
+    with ElectionDatabase(db_parameters) as reset_db:
+        # Clear the votes table
+        reset_db.cursor.execute("DELETE FROM votes")
+
+        # Reset the votes count for each candidate
+        reset_db.cursor.execute("UPDATE candidates SET votes = 0")
+
+        # Commit the changes
+        reset_db.conn.commit()
+
+    # Send a confirmation message
+    await ctx.send("All votes have been reset!")
 
 # Run the bot
 bot.run(TOKEN)
