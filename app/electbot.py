@@ -317,17 +317,20 @@ async def reset_votes(ctx):
         return
 
     with ElectionDatabase(db_parameters) as reset_db:
-        # Clear the votes table
-        reset_db.cursor.execute("DELETE FROM votes")
+        # Reset the votes for each voter
+        reset_db.cursor.execute("UPDATE votes SET candidate_id = NULL")
 
         # Reset the votes count for each candidate
         reset_db.cursor.execute("UPDATE candidates SET votes = 0")
 
-        # Commit the changes
         reset_db.conn.commit()
 
-    # Send a confirmation message
-    await ctx.send("All votes have been reset!")
+    embed = discord.Embed(
+            title="Réinitialisation des votes",
+            description="Tous les votes ont été réinitialisés !",
+            color=discord.Color.green()
+        )
+    await ctx.send(embed=embed)
 
 # Run the bot
 bot.run(TOKEN)
