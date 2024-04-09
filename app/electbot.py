@@ -192,7 +192,7 @@ async def vote(ctx):
     embed.set_image(url=EMBED_IMAGE)
     embed.set_footer(text="Développé avec ❤️ par @0xsysr3ll")
     message = await ctx.send(embed=embed)
-    global VOTING_MESSAGE_ID
+    global VOTING_MESSAGE_ID # pylint: disable=global-statement
     VOTING_MESSAGE_ID = message.id
     for candidate in candidates:
         candidate_id = candidate[0]
