@@ -83,4 +83,3 @@ If you wish to contribute to the bot's development, feel free to fork the reposi
 For support, questions, or feedback, feel free to [contact me](mailto:0xsysr3ll@pm.me)
 
 ---
-# esnhack-bot
